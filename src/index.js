@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import App from './components/App';
 
-const root = document.querySelector(`[data-react-1k-divs-root]`);
+const root = document.querySelector(`[data-hook-style-performance-comparison-root]`);
 
 function init() {
   render(<App />, root);

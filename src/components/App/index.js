@@ -5,20 +5,26 @@ import eStyled from '@emotion/styled';
 const { useStyle } = require('hook-style/dist/hook-style.js');
 
 const StyledComponentsContainer = styled.div`
-  background: black;
-  border: ${props => (props.border ? '1px solid white' : 'none')};
+  padding: 1rem;
+  background: red;
+  border: ${props => (props.border ? '1rem solid yellow' : 'none')};
 `;
 
 const StyledComponentsBox = styled.div`
+  padding: 1rem;
+  background: black;
   color: white;
 `;
 
 const EmotionStyledContainer = eStyled.div`
-  background: black;
-  border: ${props => (props.border ? '1px solid white' : 'none')};
+  padding: 1rem;
+  background: red;
+  border: ${props => (props.border ? '1rem solid yellow' : 'none')};
 `;
 
 const EmotionStyledBox = eStyled.div`
+  padding: 1rem;
+  background: black;
   color: white;
 `;
 
@@ -26,8 +32,9 @@ const EmotionContainer = ({ border, children, ...props }) => {
   return (
     <div
       className={css`
-        background: black;
-        border: ${border ? '1px solid white' : 'none'};
+        padding: 1rem;
+        background: red;
+        border: ${border ? '1rem solid yellow' : 'none'};
       `}
       {...props}
     >
@@ -40,6 +47,8 @@ const EmotionBox = ({ children, ...props }) => {
   return (
     <div
       className={css`
+        padding: 1rem;
+        background: black;
         color: white;
       `}
       {...props}
@@ -53,8 +62,9 @@ const HookStyleContainer = ({ border, children, ...props }) => {
   return (
     <div
       className={useStyle`
-        background: black;
-        border: ${border ? '1px solid white' : 'none'};
+        padding: 1rem;
+        background: red;
+        border: ${border ? '1rem solid yellow' : 'none'};
       `}
       {...props}
     >
@@ -67,6 +77,8 @@ const HookStyleBox = ({ children, ...props }) => {
   return (
     <div
       className={useStyle`
+        padding: 1rem;
+        background: black;
         color: white;
       `}
       {...props}
@@ -78,13 +90,15 @@ const HookStyleBox = ({ children, ...props }) => {
 
 const range = Array.from(Array(1000).keys());
 
+const areAnyTruthy = arr => arr.filter(x => x).length > 0;
+
 const log = (id, phase, actualTime, baseTime, startTime, commitTime) => {
   console.group(`${id}:${phase}`);
   console.log(`Actual: ${actualTime}`);
   console.log(`Base:   ${baseTime}`);
-  console.groupEnd(`${id}${phase}`);
   // console.log(`Start time: ${startTime}`);
   // console.log(`Commit time: ${commitTime}`);
+  console.groupEnd(`${id}${phase}`);
 };
 
 export default function App() {
@@ -92,12 +106,14 @@ export default function App() {
   const [isEmotionStyledActive, setIsEmotionStyledActive] = useState(false);
   const [isEmotionActive, setIsEmotionActive] = useState(false);
   const [isHookStyleActive, setIsHookStyleActive] = useState(false);
-  const isAnythingActive = [isStyledComponentsActive, isEmotionStyledActive, isEmotionActive, isHookStyleActive].filter(
-    x => x
-  ).length;
+  const isAnythingActive = areAnyTruthy([
+    isStyledComponentsActive,
+    isEmotionStyledActive,
+    isEmotionActive,
+    isHookStyleActive
+  ]);
 
   return (
-    // <Profiler id="app" onRender={log}>
     <div>
       <div>
         <button
@@ -106,21 +122,18 @@ export default function App() {
         >
           {isStyledComponentsActive ? 'Remove ' : 'Add '}
           <code>styled-components</code>
-        </button>
-        {' · '}
+        </button>{' '}
         <button
           disabled={isAnythingActive && !isEmotionStyledActive}
           onClick={() => setIsEmotionStyledActive(!isEmotionStyledActive)}
         >
           {isEmotionStyledActive ? 'Remove ' : 'Add '}
           <code>@emotion/styled</code>
-        </button>
-        {' · '}
+        </button>{' '}
         <button disabled={isAnythingActive && !isEmotionActive} onClick={() => setIsEmotionActive(!isEmotionActive)}>
           {isEmotionActive ? 'Remove ' : 'Add '}
           <code>emotion</code>
-        </button>
-        {' · '}
+        </button>{' '}
         <button
           disabled={isAnythingActive && !isHookStyleActive}
           onClick={() => setIsHookStyleActive(!isHookStyleActive)}
@@ -135,7 +148,7 @@ export default function App() {
             <StyledComponentsContainer key={index}>
               <StyledComponentsBox>
                 <StyledComponentsContainer border>
-                  <StyledComponentsBox>Box2 {index + 1}</StyledComponentsBox>
+                  <StyledComponentsBox>{index + 1}</StyledComponentsBox>
                 </StyledComponentsContainer>
               </StyledComponentsBox>
             </StyledComponentsContainer>
@@ -148,7 +161,7 @@ export default function App() {
             <EmotionStyledContainer key={index}>
               <EmotionStyledBox>
                 <EmotionStyledContainer border>
-                  <EmotionStyledBox>Box2 {index + 1}</EmotionStyledBox>
+                  <EmotionStyledBox>{index + 1}</EmotionStyledBox>
                 </EmotionStyledContainer>
               </EmotionStyledBox>
             </EmotionStyledContainer>
@@ -161,7 +174,7 @@ export default function App() {
             <EmotionContainer key={index}>
               <EmotionBox>
                 <EmotionContainer border>
-                  <EmotionBox>Box2 {index + 1}</EmotionBox>
+                  <EmotionBox>{index + 1}</EmotionBox>
                 </EmotionContainer>
               </EmotionBox>
             </EmotionContainer>
@@ -174,7 +187,7 @@ export default function App() {
             <HookStyleContainer key={index}>
               <HookStyleBox>
                 <HookStyleContainer border>
-                  <HookStyleBox>Box2 {index + 1}</HookStyleBox>
+                  <HookStyleBox>{index + 1}</HookStyleBox>
                 </HookStyleContainer>
               </HookStyleBox>
             </HookStyleContainer>
@@ -182,6 +195,5 @@ export default function App() {
         </Profiler>
       )}
     </div>
-    // </Profiler>
   );
 }
